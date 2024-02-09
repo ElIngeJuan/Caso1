@@ -1,16 +1,22 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 public class Celda extends Thread{
     private boolean viva;
     private final CeldaBuffer buffer;
     private List<Celda> vecinos = new ArrayList<>();
-    
+    private Integer generaciones;
+    private CyclicBarrier barrera;
 
 
-    public Celda(boolean estado, CeldaBuffer buzon2) {
+
+    public Celda(boolean estado, CeldaBuffer buzon2, Integer n, Integer d) {
         this.viva = estado;
         this.buffer = buzon2;
+        this.generaciones = n;
+        this.barrera = new CyclicBarrier(d*d);
     }
 
     public Boolean estaViva(){
@@ -23,20 +29,19 @@ public class Celda extends Thread{
     }
 
     public void CambiarEstado(){
-        if(this.buffer.getBuzon().size() == 0){
-            this.viva = false;
-        }
-        else if(this.buffer.getBuzon().size() > 3 ){
-            this.viva = false;
-        }
-
-        else if(this.buffer.getBuzon().size() == 3){
+        if(this.buffer.getContadorCeldasVivas() == 3 && this.viva == false){
             this.viva = true;
         }
-
-        else if((this.buffer.getBuzon().size()<3 || this.buffer.getBuzon().size()>1) && this.viva == true){
+        else if(this.buffer.getContadorCeldasVivas() >3 && this.viva){
+            this.viva = false;
+        }
+        else if(this.buffer.getContadorCeldasVivas() == 0 && this.viva){
+            this.viva = false;
+        }
+        else if(this.buffer.getContadorCeldasVivas()<3 && this.viva){
             this.viva = true;
         }
+        
     }
 
 
@@ -48,13 +53,19 @@ public class Celda extends Thread{
     @Override
     public void run() {
         try {
-            for (Celda celda : vecinos) {
-                celda.buffer.agregar(this.viva);
+            Integer n=0;
+            while (generaciones > n) {
+                for (Celda celda : vecinos) {
+                    celda.buffer.agregar(this.viva);
+                    this.buffer.quitar();
+                }
+                n++;
+                
             }
+           
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    
     }
     
 

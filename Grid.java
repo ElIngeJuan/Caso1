@@ -11,10 +11,10 @@ public class Grid {
     
     private Map<Point, Celda> tablero;
     private int n;
-    private static int generaciones;
+    private static Integer generaciones;
 
-    public Grid( Integer generaciones) {
-        this.generaciones = generaciones;
+    public Grid( Integer n) {
+        this.generaciones = n;
     }
 
     public static Map<Point, Celda> generarTablero(String nombreArchivo) {
@@ -27,7 +27,7 @@ public class Grid {
                     CeldaBuffer buffer = new CeldaBuffer(i+2);
                     boolean estado = Boolean.parseBoolean(valores[j]);
                     Point coordenada = new Point(i, j);
-                    Celda celda = new Celda(estado, buffer);
+                    Celda celda = new Celda(estado, buffer, generaciones, dimension);
                     tablero.put(coordenada, celda);
                 }
             }
@@ -93,7 +93,8 @@ public class Grid {
             celda.start();
         }
 
-        for (Celda celda : tablero.values()) {
+
+        for(Celda celda : tablero.values()){
             try {
                 celda.join();
             } catch (InterruptedException e) {
@@ -101,9 +102,11 @@ public class Grid {
             }
         }
 
+
         for (Celda celda : tablero.values()) {
             celda.CambiarEstado();
         }
+
 
     
         ImprimirTablero();
