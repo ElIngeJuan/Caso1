@@ -137,7 +137,8 @@ public void ImprimirTablero(){
     }
 
     public static void main(String[] args) {
-        Grid grid = new Grid(3);
+        Grid grid = new Grid(3
+        );
         grid.tablero = generarTablero("a.in");
         grid.iniciarJuego();
     }
