@@ -103,11 +103,7 @@ public class Grid {
         }
 
 
-        for (Celda celda : tablero.values()) {
-            celda.CambiarEstado();
-        }
-
-
+        
     
         ImprimirTablero();
 
@@ -141,7 +137,7 @@ public void ImprimirTablero(){
     }
 
     public static void main(String[] args) {
-        Grid grid = new Grid(1);
+        Grid grid = new Grid(3);
         grid.tablero = generarTablero("a.in");
         grid.iniciarJuego();
     }

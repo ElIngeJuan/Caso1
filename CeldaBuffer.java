@@ -22,6 +22,9 @@ public class CeldaBuffer {
         return contadorCeldasVivas;
     }
 
+    public void setContadorCeldasVivas(Integer contadorCeldasVivas) {
+        this.contadorCeldasVivas = contadorCeldasVivas;
+    }
 
     public synchronized void agregar(Boolean elemento) throws InterruptedException{
 

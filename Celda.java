@@ -8,7 +8,7 @@ public class Celda extends Thread{
     private final CeldaBuffer buffer;
     private List<Celda> vecinos = new ArrayList<>();
     private Integer generaciones;
-    private CyclicBarrier barrera;
+    private static CyclicBarrier barrera;
 
 
 
@@ -16,7 +16,7 @@ public class Celda extends Thread{
         this.viva = estado;
         this.buffer = buzon2;
         this.generaciones = n;
-        this.barrera = new CyclicBarrier(d*d);
+        Celda.barrera = new CyclicBarrier(d*d);
     }
 
     public Boolean estaViva(){
@@ -41,6 +41,8 @@ public class Celda extends Thread{
         else if(this.buffer.getContadorCeldasVivas()<3 && this.viva){
             this.viva = true;
         }
+
+        this.buffer.setContadorCeldasVivas(0);
         
     }
 
@@ -55,13 +57,23 @@ public class Celda extends Thread{
         try {
             Integer n=0;
             while (generaciones > n) {
+                
                 for (Celda celda : vecinos) {
                     celda.buffer.agregar(this.viva);
                     this.buffer.quitar();
                 }
+                try {
+                    barrera.await();
+                    CambiarEstado();
+                } catch (BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
+
+
                 n++;
                 
             }
+            
            
         } catch (InterruptedException e) {
             e.printStackTrace();
