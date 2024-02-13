@@ -26,7 +26,7 @@ public class Grid {
             for (int i = 0; i < dimension; i++) {
                 String[] valores = br.readLine().split(" ");
                 for (int j = 0; j < dimension; j++) {
-                    CeldaBuffer buffer = new CeldaBuffer(i+2);
+                    CeldaBuffer buffer = new CeldaBuffer(i);
                     boolean estado = Boolean.parseBoolean(valores[j]);
                     Point coordenada = new Point(i, j);
                     Celda celda = new Celda(estado, buffer, generaciones, dimension);
@@ -92,20 +92,17 @@ public class Grid {
             entry.getValue().AgregarVecinos(vecinos);
         }
         for (Celda celda : tablero.values()) {
-            celda.start();
+            celda.iniciarHilos();
         }
 
-
-        for(Celda celda : tablero.values()){
+        for (Celda celda : tablero.values()) {
             try {
-                celda.join();
+                celda.getConsumidor().join();
+                celda.getProductor().join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
-
-        
     
         ImprimirTablero();
 

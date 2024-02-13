@@ -1,22 +1,49 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-public class Celda extends Thread{
+public class Celda{
     private boolean viva;
     private final CeldaBuffer buffer;
     private List<Celda> vecinos = new ArrayList<>();
     private Integer generaciones;
+
     private static CyclicBarrier barrera;
+    private static CyclicBarrier generacion;
 
 
+    private Consumidor consumidor;
+    private Productor productor;
+
+    // Atributo estatico para saber si se ha terminado
+    private static boolean terminado = false;
+
+
+
+    public static void setTerminado(boolean terminado) {
+        Celda.terminado = terminado;
+    }
+
+    public static boolean isTerminado() {
+        return terminado;
+    }
+
+    public Consumidor getConsumidor() {
+        return consumidor;
+    }
+
+    public Productor getProductor() {
+        return productor;
+    }
 
     public Celda(boolean estado, CeldaBuffer buzon2, Integer n, Integer d) {
         this.viva = estado;
         this.buffer = buzon2;
         this.generaciones = n;
-        Celda.barrera = new CyclicBarrier(d*d);
+        Celda.barrera = new CyclicBarrier(2*(d*d));
+    
+        this.consumidor = new Consumidor(this);
+        this.productor = new Productor(this);
     }
 
     public Boolean estaViva(){
@@ -26,6 +53,11 @@ public class Celda extends Thread{
 
     public void setViva(boolean viva){
         this.viva = viva;
+    }
+
+
+    public static CyclicBarrier getBarrera() {
+        return barrera;
     }
 
     public void CambiarEstado(){
@@ -46,41 +78,25 @@ public class Celda extends Thread{
         
     }
 
-
     public void AgregarVecinos(ArrayList<Celda> vecinos){
-        this.vecinos = vecinos;
-        
+        this.vecinos = vecinos; 
     }
 
-    @Override
-    public void run() {
-        try {
-            Integer n=0;
-            while (generaciones > n) {
-                
-                for (Celda celda : vecinos) {
-                    celda.buffer.agregar(this.viva);
-                    this.buffer.quitar();
-                }
-                try {
-                    barrera.await();
-                    CambiarEstado();
-                } catch (BrokenBarrierException e) {
-                    e.printStackTrace();
-                }
-
-
-                n++;
-                
-            }
-            
-           
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public List<Celda> getVecinos() {
+        return vecinos;
     }
-    
 
+    public CeldaBuffer getBuffer() {
+        return buffer;
+    }
 
+    public Integer getGeneraciones() {
+        return generaciones;
+    }
+
+    public void iniciarHilos(){
+        this.consumidor.start();
+        this.productor.start();
+    }
 
 }
