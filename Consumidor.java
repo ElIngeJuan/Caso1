@@ -12,8 +12,8 @@ public class Consumidor extends Thread{
         try {
             Integer n=0;
             while (celda.getGeneraciones() > n) {
-                for (Celda vecinos : celda.getVecinos()) {
-                    this.celda.getBuffer().quitar();
+                for(int i=0; i<celda.getVecinos().size(); i++){
+                    celda.getBuffer().quitar();
                 }
 
                 Celda.getBarrera().await();

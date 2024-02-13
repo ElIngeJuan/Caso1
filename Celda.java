@@ -9,13 +9,11 @@ public class Celda{
     private Integer generaciones;
 
     private static CyclicBarrier barrera;
-    private static CyclicBarrier generacion;
 
 
     private Consumidor consumidor;
     private Productor productor;
 
-    // Atributo estatico para saber si se ha terminado
     private static boolean terminado = false;
 
 
