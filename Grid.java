@@ -95,13 +95,8 @@ public class Grid {
             celda.iniciarHilos();
         }
 
-        for (Celda celda : tablero.values()) {
-            try {
-                celda.getConsumidor().join();
-                celda.getProductor().join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        while (! Celda.isTerminado()) {
+            Thread.yield();
         }
     
         ImprimirTablero();
