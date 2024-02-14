@@ -24,7 +24,7 @@ public class Grid {
         try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
             int dimension = Integer.parseInt(br.readLine());// Lee la configuración del tablero
             for (int i = 0; i < dimension; i++) {
-                String[] valores = br.readLine().split(" ");
+                String[] valores = br.readLine().split(",");
                 for (int j = 0; j < dimension; j++) {
                     CeldaBuffer buffer = new CeldaBuffer(i);
                     boolean estado = Boolean.parseBoolean(valores[j]);
