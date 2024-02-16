@@ -10,21 +10,10 @@ public class Celda{
 
     private static CyclicBarrier barrera;
 
-
     private Consumidor consumidor;
     private Productor productor;
 
-    private static boolean terminado = false;
 
-
-
-    public static void setTerminado(boolean terminado) {
-        Celda.terminado = terminado;
-    }
-
-    public static boolean isTerminado() {
-        return terminado;
-    }
 
     public Consumidor getConsumidor() {
         return consumidor;

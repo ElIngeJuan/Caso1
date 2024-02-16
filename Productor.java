@@ -23,7 +23,6 @@ public class Productor extends Thread{
                 n++;
             }
 
-            Celda.setTerminado(true);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (BrokenBarrierException e) {

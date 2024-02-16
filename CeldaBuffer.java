@@ -27,7 +27,6 @@ public class CeldaBuffer {
     }
 
     public synchronized void agregar(Boolean elemento) throws InterruptedException{
-
         while(buzon.size() == cantidad){
             try {
                 wait();

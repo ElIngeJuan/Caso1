@@ -83,7 +83,7 @@ public class Grid {
         tablero.get(new Point(fila, columna)).setViva(true);
     }
     
-    public void iniciarJuego() {
+    public void iniciarJuego() throws InterruptedException {
         for (Map.Entry<Point, Celda> entry : tablero.entrySet()) {
             int i = entry.getKey().x;
             int j = entry.getKey().y;
@@ -95,10 +95,11 @@ public class Grid {
             celda.iniciarHilos();
         }
 
-        while (! Celda.isTerminado()) {
-            Thread.yield();
+        for (Celda celda : tablero.values()) {
+            celda.getConsumidor().join();
+            celda.getProductor().join();
         }
-    
+
         ImprimirTablero();
 
 
@@ -135,7 +136,7 @@ public class Grid {
 
     
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Scanner sc = new Scanner(System.in);
 
         System.out.print("Introduce el nombre del archivo: ");
