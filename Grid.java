@@ -106,33 +106,46 @@ public class Grid {
     }
 
     public void ImprimirTablero() {
-        int maxX = 0, maxY = 0;
-
-        // Encontrar las coordenadas máximas
-        for (Point point : tablero.keySet()) {
-            maxX = Math.max(maxX, point.x);
-            maxY = Math.max(maxY, point.y);
-        }
-
-        try (PrintWriter writer = new PrintWriter(new FileWriter("Resultado.out"))) {
-            // Imprimir en el archivo
-            for (int y = 0; y <= maxY; y++) {
-                for (int x = 0; x <= maxX; x++) {
-                    Point currentPoint = new Point(y, x);
-                    Celda celda = tablero.get(currentPoint);
-
-                    if (celda != null) {
-                        writer.print(celda.estaViva() + " ");
-                    } else {
-                        writer.print("0 "); // O cualquier valor por defecto si la celda está vacía
-                    }
+            try (PrintWriter writer = new PrintWriter(new FileWriter("Resultado.out"))) {
+                int maxX = 0, maxY = 0;
+        
+                // Encontrar las coordenadas máximas
+                for (Point point : tablero.keySet()) {
+                    maxX = Math.max(maxX, point.x);
+                    maxY = Math.max(maxY, point.y);
                 }
-                writer.println();
+        
+                for (int i = 0; i <= maxX; i++) {
+                    writer.print("+--------");
+                }
+                writer.println("+");
+        
+                for (int i = 0; i <= maxY; i++) {
+                    writer.print("|");
+                    for (int j = 0; j <= maxX; j++) {
+                        Point currentPoint = new Point(i, j);
+                        Celda celda = tablero.get(currentPoint);
+                        if (celda != null) {
+                            String content = celda.estaViva() ? "*" : " ";
+                            writer.printf("%4s    |", content);
+                        } else {
+                            writer.print("        |");
+                        }
+                    }
+                    writer.println();
+                    
+                    for (int k = 0; k <= maxX; k++) {
+                        writer.print("+--------");
+                    }
+                    writer.println("+");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-    }
+        
+    
+
 
     
 
