@@ -38,13 +38,10 @@ public class CeldaBuffer {
         notify();
     }
     
-    public synchronized void quitar() throws InterruptedException{
+    public synchronized Boolean quitar() throws InterruptedException{
+        Boolean sigue = true;
         while(buzon.size() == 0){
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            return sigue = null;
         }
         if(buzon.get(0)){
             contadorCeldasVivas++;
@@ -55,5 +52,7 @@ public class CeldaBuffer {
         }
         
         notifyAll();
+        return sigue;
+        
     }
 }
